@@ -1,0 +1,15 @@
+{
+  "canvas": [512, 512],
+  "baseScale": 1.0,
+  "deskTopY": 400,
+  "mouthAnchor": [238, 366],
+  "leftEyeCenter": [165, 298],
+  "rightEyeCenter": [319, 299],
+  "eyeMaxOffset": [7, 5],
+  "cheekRegion": [330, 270, 150, 125],
+  "moveRegion": [82, 34, 350, 150],
+  "clickThreshold": 8,
+  "layers": {
+    "master": "master_transparent.png"
+  }
+}
