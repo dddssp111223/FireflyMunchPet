@@ -1,0 +1,20 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource path="res://assets/character/master_transparent.png" type="Texture2D" id="1_texture"]
+[ext_resource path="res://src/Character/CharacterRig.cs" type="Script" id="2_rig"]
+[ext_resource path="res://src/Character/ExpressionOverlay.cs" type="Script" id="3_overlay"]
+[ext_resource path="res://shaders/pet_warp.gdshader" type="Shader" id="4_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_pet"]
+shader = ExtResource("4_shader")
+
+[node name="CharacterRig" type="Node2D"]
+script = ExtResource("2_rig")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_pet")
+texture = ExtResource("1_texture")
+centered = false
+
+[node name="ExpressionOverlay" type="Node2D" parent="."]
+script = ExtResource("3_overlay")
