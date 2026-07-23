@@ -1,6 +1,13 @@
 using DesktopPet.Tests;
 
-var suites = new Action[] { PetStateMachineTests.Run };
+var suites = new Action[]
+{
+    PetStateMachineTests.Run,
+    GestureClassifierTests.Run,
+    EyeConstraintTests.Run,
+    SettingsJsonTests.Run,
+    DropBatchTests.Run
+};
 var failed = 0;
 
 foreach (var suite in suites)

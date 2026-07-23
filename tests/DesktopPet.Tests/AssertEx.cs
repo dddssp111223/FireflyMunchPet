@@ -13,4 +13,19 @@ internal static class AssertEx
         if (!value)
             throw new InvalidOperationException($"{name}: expected true");
     }
+
+    public static void Throws<TException>(Action action, string name)
+        where TException : Exception
+    {
+        try
+        {
+            action();
+        }
+        catch (TException)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException($"{name}: expected {typeof(TException).Name}");
+    }
 }
