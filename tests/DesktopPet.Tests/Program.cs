@@ -1,4 +1,6 @@
-var suites = Array.Empty<Action>();
+using DesktopPet.Tests;
+
+var suites = new Action[] { PetStateMachineTests.Run };
 var failed = 0;
 
 foreach (var suite in suites)
