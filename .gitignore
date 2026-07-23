@@ -3,6 +3,7 @@
 .tools/*
 !.tools/README.md
 .dotnet/
+.nuget/
 .godot/
 .mono/
 .vs/

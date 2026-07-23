@@ -1,0 +1,16 @@
+[application]
+config/name="MunchPet"
+run/main_scene="res://scenes/pet.tscn"
+
+[display]
+window/size/viewport_width=512
+window/size/viewport_height=512
+window/size/window_width_override=512
+window/size/window_height_override=512
+window/size/borderless=true
+window/per_pixel_transparency/allowed=true
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+environment/defaults/default_clear_color=Color(0, 0, 0, 0)

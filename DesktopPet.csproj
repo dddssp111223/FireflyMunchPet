@@ -1,0 +1,13 @@
+<Project Sdk="Godot.NET.Sdk/4.7.1">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <EnableDynamicLoading>true</EnableDynamicLoading>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="src\Core\**\*.cs" />
+    <Compile Remove="tests\**\*.cs" />
+    <ProjectReference Include="src/Core/DesktopPet.Core.csproj" />
+  </ItemGroup>
+</Project>
