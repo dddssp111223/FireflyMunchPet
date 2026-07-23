@@ -15,6 +15,15 @@ public partial class ExpressionOverlay : Node2D
     }
 
     private EyeExpression _expression;
+    private MouthExpression _mouth;
+
+    public enum MouthExpression
+    {
+        Original,
+        Hungry,
+        Maximum,
+        Closed
+    }
 
     public void SetExpression(EyeExpression expression)
     {
@@ -22,29 +31,59 @@ public partial class ExpressionOverlay : Node2D
         QueueRedraw();
     }
 
+    public void SetMouth(MouthExpression expression)
+    {
+        _mouth = expression;
+        QueueRedraw();
+    }
+
     public override void _Draw()
     {
-        if (_expression == EyeExpression.Open)
-            return;
-
         var skin = new Color("#f9d9df");
-        DrawEllipse(new Vector2(165, 299), new Vector2(49, 38), skin);
-        DrawEllipse(new Vector2(319, 300), new Vector2(49, 38), skin);
-
-        switch (_expression)
+        if (_expression != EyeExpression.Open)
         {
-            case EyeExpression.Blink:
-                DrawBlink(new Vector2(165, 302), false);
-                DrawBlink(new Vector2(319, 302), true);
-                break;
-            case EyeExpression.Star:
-                DrawStar(new Vector2(165, 298), 28, 12, new Color("#78f5f0"));
-                DrawStar(new Vector2(319, 299), 28, 12, new Color("#b5ff83"));
-                break;
-            case EyeExpression.GreaterLess:
-                DrawGreaterLess(new Vector2(165, 300), true);
-                DrawGreaterLess(new Vector2(319, 300), false);
-                break;
+            DrawEllipse(new Vector2(165, 299), new Vector2(49, 38), skin);
+            DrawEllipse(new Vector2(319, 300), new Vector2(49, 38), skin);
+
+            switch (_expression)
+            {
+                case EyeExpression.Blink:
+                    DrawBlink(new Vector2(165, 302), false);
+                    DrawBlink(new Vector2(319, 302), true);
+                    break;
+                case EyeExpression.Star:
+                    DrawStar(new Vector2(165, 298), 28, 12, new Color("#78f5f0"));
+                    DrawStar(new Vector2(319, 299), 28, 12, new Color("#b5ff83"));
+                    break;
+                case EyeExpression.GreaterLess:
+                    DrawGreaterLess(new Vector2(165, 300), true);
+                    DrawGreaterLess(new Vector2(319, 300), false);
+                    break;
+            }
+        }
+
+        if (_mouth != MouthExpression.Original)
+        {
+            DrawEllipse(new Vector2(242, 376), new Vector2(67, 54), skin);
+            switch (_mouth)
+            {
+                case MouthExpression.Hungry:
+                    DrawEllipse(new Vector2(242, 379), new Vector2(32, 27), new Color("#512f43"));
+                    DrawEllipse(new Vector2(242, 392), new Vector2(20, 9), new Color("#f38ca4"));
+                    break;
+                case MouthExpression.Maximum:
+                    DrawEllipse(new Vector2(242, 374), new Vector2(54, 51), new Color("#3a2233"));
+                    DrawEllipse(new Vector2(242, 400), new Vector2(37, 16), new Color("#f0819e"));
+                    break;
+                case MouthExpression.Closed:
+                    DrawPolyline(new[]
+                    {
+                        new Vector2(215, 378),
+                        new Vector2(242, 385),
+                        new Vector2(269, 378)
+                    }, new Color("#6a394a"), 7, true);
+                    break;
+            }
         }
     }
 

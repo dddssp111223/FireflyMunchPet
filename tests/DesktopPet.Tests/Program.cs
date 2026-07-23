@@ -6,7 +6,8 @@ var suites = new Action[]
     GestureClassifierTests.Run,
     EyeConstraintTests.Run,
     SettingsJsonTests.Run,
-    DropBatchTests.Run
+    DropBatchTests.Run,
+    ShellDeleteResultMapperTests.Run
 };
 var failed = 0;
 

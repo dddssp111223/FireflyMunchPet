@@ -1,6 +1,7 @@
 using DesktopPet.Core;
 using Godot;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using NumericsVector2 = System.Numerics.Vector2;
 
 namespace DesktopPet.Character;
@@ -49,6 +50,9 @@ public partial class CharacterRig : Node2D
         _overlay.SetExpression(active
             ? ExpressionOverlay.EyeExpression.Star
             : ExpressionOverlay.EyeExpression.Open);
+        _overlay.SetMouth(active
+            ? ExpressionOverlay.MouthExpression.Hungry
+            : ExpressionOverlay.MouthExpression.Original);
         var tween = CreateTween();
         tween.TweenProperty(this, "scale", active ? new Vector2(1.025f, 1.025f) : Vector2.One, 0.12);
     }
@@ -82,10 +86,38 @@ public partial class CharacterRig : Node2D
             0.22).SetTrans(Tween.TransitionType.Back).SetEase(Tween.EaseType.Out);
     }
 
-    public async void PlaySwallow()
+    public async void PlaySwallow(IReadOnlyList<Texture2D> icons, Vector2 dropPoint)
     {
         _eyeTracking = false;
+        _overlay.SetExpression(ExpressionOverlay.EyeExpression.Star);
+        _overlay.SetMouth(ExpressionOverlay.MouthExpression.Maximum);
+
+        var iconLayer = new Node2D
+        {
+            Position = dropPoint,
+            ZIndex = 100
+        };
+        AddChild(iconLayer);
+        for (var index = 0; index < icons.Count && index < 3; index++)
+        {
+            var iconSprite = new Sprite2D
+            {
+                Texture = icons[index],
+                Position = new Vector2(index * 8, -index * 7),
+                Scale = Vector2.One * 1.25f
+            };
+            iconLayer.AddChild(iconSprite);
+        }
+
+        var feedTween = CreateTween().SetParallel();
+        feedTween.TweenProperty(iconLayer, "position", new Vector2(242, 376), 0.28)
+            .SetTrans(Tween.TransitionType.Cubic).SetEase(Tween.EaseType.In);
+        feedTween.TweenProperty(iconLayer, "scale", Vector2.One * 0.42f, 0.28);
+        await ToSignal(feedTween, Tween.SignalName.Finished);
+        iconLayer.QueueFree();
+
         _overlay.SetExpression(ExpressionOverlay.EyeExpression.GreaterLess);
+        _overlay.SetMouth(ExpressionOverlay.MouthExpression.Closed);
         var tween = CreateTween();
         tween.TweenMethod(Callable.From<float>(value =>
             _material.SetShaderParameter("swallow", value)), 0f, 1f, 0.18);
@@ -96,6 +128,7 @@ public partial class CharacterRig : Node2D
         await ToSignal(tween, Tween.SignalName.Finished);
         _material.SetShaderParameter("swallow", 0f);
         _overlay.SetExpression(ExpressionOverlay.EyeExpression.Open);
+        _overlay.SetMouth(ExpressionOverlay.MouthExpression.Original);
         _eyeTracking = true;
         EmitSignal(SignalName.OneShotFinished);
     }
