@@ -1,0 +1,10 @@
+.superpowers/
+.godot/
+.mono/
+.vs/
+bin/
+obj/
+build/
+dist/
+*.tmp
+*.log
