@@ -1,5 +1,8 @@
 .superpowers/
 .worktrees/
+.tools/*
+!.tools/README.md
+.dotnet/
 .godot/
 .mono/
 .vs/
@@ -7,5 +10,7 @@ bin/
 obj/
 build/
 dist/
+exports/
+artifacts/
 *.tmp
 *.log
