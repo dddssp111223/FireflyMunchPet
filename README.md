@@ -1,4 +1,4 @@
-# MunchPet — 二次元桌面文件吞噬宠
+# Firefly MunchPet — 二次元桌面文件吞噬宠
 
 把文件/文件夹拖到桌宠身上，它会"啊呜"一口帮你吃掉——实际上是移到 Windows 回收站。支持待机动画、鼠标跟随、Q弹互动、托盘控制等。
 
@@ -8,14 +8,13 @@
 - **待机动画** — 眨眼、呼吸、头发和口水轻微晃动
 - **眼睛跟随鼠标** — 眼球在生理合理范围内追踪鼠标位置
 - **单击 Q 弹** — 点击角色任意可见区域会压扁回弹（带音效）
-- **脸颊拉伸** — 右键按住脸颊拖拽，松手弹簧式回弹
 - **拖头发移动** — 按住上方头发区域可拖拽移动窗口
 - **系统托盘菜单** — 置顶切换、四档缩放（75/100/125/150%）、静音、复位、退出
 - **透明窗口** — 空白像素不遮挡桌面操作
 
 ## 下载
 
-前往 [Releases](../../releases) 页面下载最新 `MunchPet-win-x64-visual-v6.zip`，解压后双击 `MunchPet.exe` 即可运行。
+前往 [Releases](../../releases) 页面下载最新 `FireflyMunchPet.zip`，解压后双击 `FireflyMunchPet.exe` 即可运行。
 
 - 平台：Windows 10/11 x64
 - 无需安装 Godot 或 .NET 运行时
@@ -34,8 +33,8 @@
 
 ```powershell
 # 1. 克隆仓库
-git clone https://github.com/<your-username>/MunchPet.git
-cd MunchPet
+git clone https://github.com/dddssp111223/FireflyMunchPet.git
+cd FireflyMunchPet
 
 # 2. 恢复 .NET 依赖
 dotnet restore
