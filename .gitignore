@@ -17,3 +17,11 @@ artifacts/
 *.log
 __pycache__/
 *.pyc
+
+# Release packages
+*.zip
+
+# Built output directories
+MunchPet-win-x64-visual-v6/
+五角色桌宠成品/
+分析/
