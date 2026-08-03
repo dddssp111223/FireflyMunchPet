@@ -9,6 +9,7 @@ internal static class PetStateMachineTests
         FailedDeleteRejects();
         SuccessfulDeleteSwallowsAndBlocksAnotherFeed();
         CancelledDeleteReturnsToIdle();
+        ReminderBounceIsTransientAndBusy();
     }
 
     private static void FailedDeleteRejects()
@@ -40,5 +41,16 @@ internal static class PetStateMachineTests
         machine.BeginShellPending();
 
         AssertEx.Equal(PetState.Idle, machine.ResolveDelete(DeleteOutcome.Cancelled), "cancel returns idle");
+    }
+
+    private static void ReminderBounceIsTransientAndBusy()
+    {
+        var machine = new PetStateMachine();
+        AssertEx.True(machine.BeginReminderBounce(), "reminder bounce begins from idle");
+        AssertEx.Equal(PetState.ReminderBounce, machine.State, "reminder bounce state");
+        AssertEx.True(machine.IsBusy, "reminder bounce blocks conflicting interaction");
+        AssertEx.True(!machine.BeginClickBounce(), "manual click cannot overlap reminder bounce");
+        machine.FinishTransient();
+        AssertEx.Equal(PetState.Idle, machine.State, "reminder bounce returns idle");
     }
 }

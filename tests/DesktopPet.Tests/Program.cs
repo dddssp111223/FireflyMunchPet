@@ -6,8 +6,13 @@ var suites = new Action[]
     GestureClassifierTests.Run,
     EyeConstraintTests.Run,
     SettingsJsonTests.Run,
+    ReminderDefinitionTests.Run,
+    ReminderPersistenceTests.Run,
+    ReminderSchedulerTests.Run,
+    ReminderPresentationTests.Run,
     DropBatchTests.Run,
-    ShellDeleteResultMapperTests.Run
+    ShellDeleteResultMapperTests.Run,
+    CharacterAnimationMathTests.Run
 };
 var failed = 0;
 

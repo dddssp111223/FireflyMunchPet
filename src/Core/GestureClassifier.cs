@@ -5,7 +5,6 @@ namespace DesktopPet.Core;
 public enum HitRegion
 {
     Visible,
-    Cheek,
     MoveHandle
 }
 
@@ -13,7 +12,6 @@ public enum GestureKind
 {
     None,
     Click,
-    CheekDrag,
     WindowDrag
 }
 
@@ -30,7 +28,6 @@ public static class GestureClassifier
 
         return region switch
         {
-            HitRegion.Cheek => GestureKind.CheekDrag,
             HitRegion.MoveHandle => GestureKind.WindowDrag,
             _ => GestureKind.None
         };

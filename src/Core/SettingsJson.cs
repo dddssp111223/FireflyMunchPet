@@ -22,7 +22,7 @@ public static class SettingsJson
 
             var defaults = PetSettings.Default;
             var requestedScale = dto.ScalePercent ?? defaults.ScalePercent;
-            var scale = requestedScale is 75 or 100 or 125 or 150
+            var scale = requestedScale is 30 or 50 or 75 or 100 or 125 or 150
                 ? requestedScale
                 : defaults.ScalePercent;
 
@@ -30,6 +30,8 @@ public static class SettingsJson
                 scale,
                 dto.AlwaysOnTop ?? defaults.AlwaysOnTop,
                 dto.Muted ?? defaults.Muted,
+                dto.HarmonizedMode ?? defaults.HarmonizedMode,
+                dto.RemindersEnabled ?? defaults.RemindersEnabled,
                 dto.X ?? defaults.X,
                 dto.Y ?? defaults.Y,
                 dto.MonitorId ?? defaults.MonitorId);
@@ -44,6 +46,8 @@ public static class SettingsJson
         int? ScalePercent,
         bool? AlwaysOnTop,
         bool? Muted,
+        bool? HarmonizedMode,
+        bool? RemindersEnabled,
         int? X,
         int? Y,
         string? MonitorId);

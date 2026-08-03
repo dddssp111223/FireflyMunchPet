@@ -6,7 +6,6 @@
   "leftEyeCenter": [165, 298],
   "rightEyeCenter": [319, 299],
   "eyeMaxOffset": [7, 5],
-  "cheekRegion": [330, 270, 150, 125],
   "moveRegion": [82, 34, 350, 150],
   "clickThreshold": 8,
   "layers": {

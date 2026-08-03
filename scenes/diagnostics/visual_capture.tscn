@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource path="res://src/Diagnostics/VisualCapture.cs" type="Script" id="1_capture"]
+[ext_resource path="res://scenes/character/character_rig.tscn" type="PackedScene" id="2_rig"]
+
+[node name="VisualCapture" type="Node2D"]
+script = ExtResource("1_capture")
+
+[node name="Background" type="ColorRect" parent="."]
+z_index = -100
+offset_right = 512.0
+offset_bottom = 512.0
+mouse_filter = 2
+color = Color(0, 0.72, 0.72, 1)
+
+[node name="CharacterRig" parent="." instance=ExtResource("2_rig")]

@@ -1,0 +1,59 @@
+{
+  "tool_mode": "built-in image_gen",
+  "generation_date": "2026-08-02",
+  "prompt": "Use case: precise-object-edit\nAsset type: aligned Windows desktop-pet animation keyframe\nPrimary request: remove every visible saliva element only, including the desk puddle, wet streaks, mouth-corner droplets, and saliva strings. Reconstruct clean dry desk and mouth artwork.\nConstraints: preserve the exact frame role, composition, identity, pose, expression, mouth, tongue, teeth, eyes, hair, ornaments, line art, palette, shading, desk edge, and desk geometry. No redesign, restyling, text, watermark, or new elements.\n",
+  "localized_transfer": {
+    "method": "full ImageGen keyframe artwork with the accepted source alpha silhouette restored exactly",
+    "source_alpha_preserved": true
+  },
+  "frames": [
+    {
+      "source": "idle.png",
+      "source_sha256": "82F53D7F52F7C417C084B8546B73073DAF59D20ED08F3361B615CF391055CDD9",
+      "generated_source": "generated_sources/idle_harmonized.png",
+      "generated_sha256": "AF41189A8E7B10250D96122EC277DC92398D49FEF77367B5D1FC50DB886BD8FC",
+      "output": "idle_harmonized.png",
+      "output_sha256": "CEBC18367BEA95D8DBB73BB1CC0D45B8C9C68BA6146744CF588B02C0C0B5C77D"
+    },
+    {
+      "source": "blink.png",
+      "source_sha256": "A8FAF4C7F7215F23F6953D944F4605CB8676AE328F6D056F7D3F1C7A7B3A7E05",
+      "generated_source": "generated_sources/blink_harmonized.png",
+      "generated_sha256": "29EB51F091ADE99F95EEDF15F3084DA9F348F970A8FBB7ADD34CB39D83B9039B",
+      "output": "blink_harmonized.png",
+      "output_sha256": "EB48AB3F116D10B85B3AC1FBF2A735B89338CA287269127128FD3EAF89B8C5A8"
+    },
+    {
+      "source": "hover.png",
+      "source_sha256": "A021C096683890E1DB6F0D2F7826324F8A6563EF5AF8534E1F26BA1011367AED",
+      "generated_source": "generated_sources/hover_harmonized.png",
+      "generated_sha256": "7F0137985AF1B66D66BFF1389AAFD8284E83161E5A6E57192BDAA6499BB7A214",
+      "output": "hover_harmonized.png",
+      "output_sha256": "8124BB8C0F625D2494176DBF9C307B0B8AB9D0E3AB0489F6E389552E0B86F2DF"
+    },
+    {
+      "source": "swallow_anticipation.png",
+      "source_sha256": "71FDE4B5FE55878023DD93571ADECBD132B18510F6360BBECB5FB6630E1F6FF9",
+      "generated_source": "generated_sources/swallow_anticipation_harmonized.png",
+      "generated_sha256": "D99EA7276BDC5CC240FF77D57385014750B1659C54B24B130C801C94704F8DFC",
+      "output": "swallow_anticipation_harmonized.png",
+      "output_sha256": "B7A9A0E787FAA3BDA75D361EE9511EFAD4F6552415BDD08D532B5590F45C8289"
+    },
+    {
+      "source": "swallow_max.png",
+      "source_sha256": "AC0F69ED7C6AEC5CE4E9F2B5724471603ACFED816AE2FA6B8BD9C1033CB06B38",
+      "generated_source": "generated_sources/swallow_max_harmonized.png",
+      "generated_sha256": "C73528C56CAA2A153F281A97D33EE669714EA1E8BC45BCA7A7303E2A226D6789",
+      "output": "swallow_max_harmonized.png",
+      "output_sha256": "949B2B5F3407554248164DD022F99463EC08A3C66D0C188CE45DF5498C07A2CE"
+    },
+    {
+      "source": "swallow_gulp.png",
+      "source_sha256": "68158B13DD8566B8EFB37F0E877F44305FE7BF551ED3D63D2EDC84EBB6EC30B3",
+      "generated_source": "generated_sources/swallow_gulp_harmonized.png",
+      "generated_sha256": "065AFBD41C826FFF803541159365A708B81CFCF02351A938B678CF64927A2AE0",
+      "output": "swallow_gulp_harmonized.png",
+      "output_sha256": "E5B6DBE058C5A903BEAEDF0B2B8DA32ACD713EC8D63D42511D09ACD6A9259BF7"
+    }
+  ]
+}

@@ -8,6 +8,8 @@
   <ItemGroup>
     <Compile Remove="src\Core\**\*.cs" />
     <Compile Remove="tests\**\*.cs" />
+    <Compile Remove="artifacts\**\*.cs" />
+    <Compile Remove="exports\**\*.cs" />
     <ProjectReference Include="src/Core/DesktopPet.Core.csproj" />
   </ItemGroup>
 </Project>

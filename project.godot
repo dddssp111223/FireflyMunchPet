@@ -1,19 +1,39 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
 [application]
+
 config/name="MunchPet"
 run/main_scene="res://scenes/pet.tscn"
+config/features=PackedStringArray("4.7", "C#")
 
 [display]
+
 window/size/viewport_width=512
 window/size/viewport_height=512
+window/size/borderless=true
+window/size/transparent=true
 window/size/window_width_override=512
 window/size/window_height_override=512
-window/size/borderless=true
+window/subwindows/embed_subwindows=false
+window/stretch/mode="canvas_items"
+window/stretch/aspect="keep"
 window/per_pixel_transparency/allowed=true
 
 [dotnet]
+
 project/assembly_name="DesktopPet"
 
 [rendering]
+
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 environment/defaults/default_clear_color=Color(0, 0, 0, 0)
+viewport/transparent_background=true

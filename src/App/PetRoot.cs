@@ -1,3 +1,4 @@
+using DesktopPet.App.Reminders;
 using DesktopPet.Character;
 using DesktopPet.Core;
 using DesktopPet.Windows;
@@ -13,6 +14,11 @@ namespace DesktopPet.App;
 public partial class PetRoot : Node2D
 {
     private const int MenuTopmost = 1;
+    private const int MenuHarmonized = 2;
+    private const int MenuRemindersEnabled = 3;
+    private const int MenuEditReminders = 4;
+    private const int MenuScale30 = 30;
+    private const int MenuScale50 = 50;
     private const int MenuScale75 = 75;
     private const int MenuScale100 = 100;
     private const int MenuScale125 = 125;
@@ -28,6 +34,7 @@ public partial class PetRoot : Node2D
     private ShellFileOperation _deleteService = null!;
     private PopupMenu _trayMenu = null!;
     private StatusIndicator _statusIndicator = null!;
+    private ReminderCoordinator _reminders = null!;
     private PetSettings _settings = PetSettings.Default;
 
     private bool _pointerDown;
@@ -40,6 +47,7 @@ public partial class PetRoot : Node2D
 
     public override void _Ready()
     {
+        GetTree().Root.GuiEmbedSubwindows = false;
         _window = GetWindow();
         _rig = GetNode<CharacterRig>("CharacterRig");
         _audio = new PetAudioController(this);
@@ -48,19 +56,24 @@ public partial class PetRoot : Node2D
         _window.Borderless = true;
         _window.AlwaysOnTop = false;
         _window.Unresizable = true;
+        _window.ContentScaleSize = new Vector2I(512, 512);
+        _window.ContentScaleMode = Window.ContentScaleModeEnum.CanvasItems;
+        _window.ContentScaleAspect = Window.ContentScaleAspectEnum.Keep;
         _window.FilesDropped += OnFilesDropped;
         _rig.OneShotFinished += OnOneShotFinished;
 
-        SetMousePassthroughContour();
         LoadSettings();
         ApplySettings(placeAtDefaultWhenUnset: true);
         WindowStyleService.ApplyDesktopPetStyles(_window);
         _deleteService = new ShellFileOperation(WindowStyleService.GetHwnd(_window));
+        CreateReminderCoordinator();
         CreateTray();
     }
 
     public override void _ExitTree()
     {
+        if (IsInstanceValid(_reminders))
+            _reminders.Shutdown();
         SaveSettings();
         if (IsInstanceValid(_statusIndicator))
             _statusIndicator.Visible = false;
@@ -117,20 +130,15 @@ public partial class PetRoot : Node2D
         if (_activeGesture == GestureKind.None && classified != GestureKind.Click)
         {
             _activeGesture = classified;
-            if (_activeGesture == GestureKind.CheekDrag)
-                _state.BeginCheekDrag();
-            else if (_activeGesture == GestureKind.WindowDrag)
+            if (_activeGesture == GestureKind.WindowDrag)
                 _state.BeginWindowDrag();
         }
 
-        if (_activeGesture == GestureKind.CheekDrag)
-        {
-            _rig.SetCheekPull(localPoint - _downLocal);
-        }
-        else if (_activeGesture == GestureKind.WindowDrag)
+        if (_activeGesture == GestureKind.WindowDrag)
         {
             var delta = DisplayServer.MouseGetPosition() - _downScreen;
             _window.Position = ClampToPrimaryWorkArea(_downWindow + delta);
+            _reminders.NotifyPetMovedOrScaled();
         }
     }
 
@@ -142,13 +150,6 @@ public partial class PetRoot : Node2D
         _pointerDown = false;
         var completedGesture = _activeGesture;
         _activeGesture = GestureKind.None;
-
-        if (completedGesture == GestureKind.CheekDrag)
-        {
-            _rig.ReleaseCheek();
-            _state.FinishTransient();
-            return;
-        }
 
         if (completedGesture == GestureKind.WindowDrag)
         {
@@ -249,8 +250,6 @@ public partial class PetRoot : Node2D
 
     private static HitRegion HitTest(Vector2 point)
     {
-        if (point.X >= 320 && point.Y >= 245 && point.Y <= 425)
-            return HitRegion.Cheek;
         if (point.X >= 70 && point.X <= 450 && point.Y <= 205)
             return HitRegion.MoveHandle;
         return HitRegion.Visible;
@@ -261,7 +260,13 @@ public partial class PetRoot : Node2D
         _trayMenu = new PopupMenu { Name = "TrayMenu" };
         AddChild(_trayMenu);
         _trayMenu.AddCheckItem("置顶显示", MenuTopmost);
+        _trayMenu.AddCheckItem("和谐版", MenuHarmonized);
         _trayMenu.AddSeparator();
+        _trayMenu.AddCheckItem("开启备忘录提醒", MenuRemindersEnabled);
+        _trayMenu.AddItem("编辑任务列表…", MenuEditReminders);
+        _trayMenu.AddSeparator();
+        _trayMenu.AddRadioCheckItem("缩放 30%", MenuScale30);
+        _trayMenu.AddRadioCheckItem("缩放 50%", MenuScale50);
         _trayMenu.AddRadioCheckItem("缩放 75%", MenuScale75);
         _trayMenu.AddRadioCheckItem("缩放 100%", MenuScale100);
         _trayMenu.AddRadioCheckItem("缩放 125%", MenuScale125);
@@ -292,7 +297,21 @@ public partial class PetRoot : Node2D
             case MenuTopmost:
                 _settings = _settings with { AlwaysOnTop = !_settings.AlwaysOnTop };
                 _window.AlwaysOnTop = _settings.AlwaysOnTop;
+                _reminders.SetTopmost(_settings.AlwaysOnTop);
                 break;
+            case MenuHarmonized:
+                _settings = _settings with { HarmonizedMode = !_settings.HarmonizedMode };
+                _rig.SetHarmonizedMode(_settings.HarmonizedMode);
+                break;
+            case MenuRemindersEnabled:
+                _settings = _settings with { RemindersEnabled = !_settings.RemindersEnabled };
+                _reminders.SetEnabled(_settings.RemindersEnabled);
+                break;
+            case MenuEditReminders:
+                _reminders.OpenEditor();
+                break;
+            case MenuScale30:
+            case MenuScale50:
             case MenuScale75:
             case MenuScale100:
             case MenuScale125:
@@ -307,6 +326,7 @@ public partial class PetRoot : Node2D
             case MenuResetPosition:
                 PlaceAtLowerRight();
                 SaveCurrentPosition();
+                _reminders.NotifyPetMovedOrScaled();
                 break;
             case MenuExit:
                 _statusIndicator.Visible = false;
@@ -321,8 +341,14 @@ public partial class PetRoot : Node2D
     private void RefreshTrayChecks()
     {
         SetMenuChecked(MenuTopmost, _settings.AlwaysOnTop);
+        SetMenuChecked(MenuHarmonized, _settings.HarmonizedMode);
+        SetMenuChecked(MenuRemindersEnabled, _settings.RemindersEnabled);
         SetMenuChecked(MenuMute, _settings.Muted);
-        foreach (var scale in new[] { MenuScale75, MenuScale100, MenuScale125, MenuScale150 })
+        foreach (var scale in new[]
+                 {
+                     MenuScale30, MenuScale50, MenuScale75,
+                     MenuScale100, MenuScale125, MenuScale150
+                 })
             SetMenuChecked(scale, _settings.ScalePercent == scale);
     }
 
@@ -337,6 +363,7 @@ public partial class PetRoot : Node2D
     {
         _window.AlwaysOnTop = _settings.AlwaysOnTop;
         _audio.Muted = _settings.Muted;
+        _rig.SetHarmonizedMode(_settings.HarmonizedMode);
         ApplyScale();
         if (_settings.X >= 0 && _settings.Y >= 0)
             _window.Position = ClampToPrimaryWorkArea(new Vector2I(_settings.X, _settings.Y));
@@ -351,6 +378,8 @@ public partial class PetRoot : Node2D
             Mathf.RoundToInt(512 * factor),
             Mathf.RoundToInt(512 * factor));
         _window.Position = ClampToPrimaryWorkArea(_window.Position);
+        if (IsInstanceValid(_reminders))
+            _reminders.NotifyPetMovedOrScaled();
     }
 
     private void PlaceAtLowerRight()
@@ -396,19 +425,23 @@ public partial class PetRoot : Node2D
         File.WriteAllText(path, SettingsJson.Serialize(_settings));
     }
 
-    private void SetMousePassthroughContour()
+    private void CreateReminderCoordinator()
     {
-        _window.MousePassthroughPolygon = new[]
-        {
-            new Vector2(80, 75),
-            new Vector2(155, 18),
-            new Vector2(330, 8),
-            new Vector2(438, 70),
-            new Vector2(505, 260),
-            new Vector2(512, 512),
-            new Vector2(0, 512),
-            new Vector2(0, 420),
-            new Vector2(55, 255)
-        };
+        var reminderPath = ProjectSettings.GlobalizePath("user://reminders.json");
+        _reminders = new ReminderCoordinator { Name = "ReminderCoordinator" };
+        AddChild(_reminders);
+        _reminders.Initialize(
+            reminderPath,
+            _window,
+            _rig,
+            () => _state.BeginReminderBounce(),
+            () => _state.State == PetState.Idle);
+        _rig.ReminderBouncePulse += OnReminderBouncePulse;
+        _reminders.SetTopmost(_settings.AlwaysOnTop);
+        _reminders.SetEnabled(_settings.RemindersEnabled);
     }
+
+    private void OnReminderBouncePulse() =>
+        _audio.Play(PetAudioController.Sound.Click);
+
 }

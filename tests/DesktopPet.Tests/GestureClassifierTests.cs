@@ -9,12 +9,8 @@ internal static class GestureClassifierTests
     {
         AssertEx.Equal(
             GestureKind.Click,
-            GestureClassifier.Classify(HitRegion.Cheek, Vector2.Zero, new Vector2(2, 1), 8),
-            "short cheek press is click");
-        AssertEx.Equal(
-            GestureKind.CheekDrag,
-            GestureClassifier.Classify(HitRegion.Cheek, Vector2.Zero, new Vector2(12, 0), 8),
-            "cheek movement becomes pull");
+            GestureClassifier.Classify(HitRegion.Visible, Vector2.Zero, new Vector2(2, 1), 8),
+            "short visible press is click");
         AssertEx.Equal(
             GestureKind.WindowDrag,
             GestureClassifier.Classify(HitRegion.MoveHandle, Vector2.Zero, new Vector2(0, 12), 8),

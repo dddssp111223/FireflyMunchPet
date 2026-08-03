@@ -2,8 +2,6 @@ shader_type canvas_item;
 
 uniform float idle_phase = 0.0;
 uniform vec2 eye_offset = vec2(0.0);
-uniform vec2 cheek_pull = vec2(0.0);
-uniform float swallow = 0.0;
 
 float ellipse_mask(vec2 uv, vec2 center, vec2 radius) {
 	vec2 p = (uv - center) / radius;
@@ -19,12 +17,6 @@ void fragment() {
 
 	float drool = ellipse_mask(uv, vec2(0.47, 0.80), vec2(0.16, 0.12));
 	uv.x += sin(idle_phase * 0.72) * 0.0035 * drool;
-
-	float cheek = ellipse_mask(uv, vec2(0.77, 0.65), vec2(0.25, 0.24));
-	uv -= cheek_pull * cheek * cheek;
-
-	float gulp = ellipse_mask(uv, vec2(0.50, 0.66), vec2(0.46, 0.38));
-	uv.y -= swallow * gulp * 0.018;
 
 	vec4 base = texture(TEXTURE, uv);
 	float left_eye = ellipse_mask(uv, vec2(0.322, 0.582), vec2(0.095, 0.085));

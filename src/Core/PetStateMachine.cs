@@ -4,7 +4,7 @@ public sealed class PetStateMachine
 {
     public PetState State { get; private set; } = PetState.Idle;
 
-    public bool IsBusy => State is PetState.ShellPending or PetState.Swallowing;
+    public bool IsBusy => State is PetState.ShellPending or PetState.Swallowing or PetState.ReminderBounce;
 
     public bool EnterFileHover() => Transition(PetState.Idle, PetState.FileHover);
 
@@ -14,7 +14,7 @@ public sealed class PetStateMachine
 
     public bool BeginClickBounce() => Transition(PetState.Idle, PetState.ClickBounce);
 
-    public bool BeginCheekDrag() => Transition(PetState.Idle, PetState.CheekDragging);
+    public bool BeginReminderBounce() => Transition(PetState.Idle, PetState.ReminderBounce);
 
     public bool BeginWindowDrag() => Transition(PetState.Idle, PetState.WindowDragging);
 
@@ -34,8 +34,8 @@ public sealed class PetStateMachine
 
     public void FinishTransient()
     {
-        if (State is PetState.Swallowing or PetState.ClickBounce or
-            PetState.CheekDragging or PetState.WindowDragging or PetState.Rejecting)
+        if (State is PetState.Swallowing or PetState.ClickBounce or PetState.ReminderBounce or
+            PetState.WindowDragging or PetState.Rejecting)
         {
             State = PetState.Idle;
         }

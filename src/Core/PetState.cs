@@ -7,7 +7,7 @@ public enum PetState
     ShellPending,
     Swallowing,
     ClickBounce,
-    CheekDragging,
+    ReminderBounce,
     WindowDragging,
     Rejecting
 }
